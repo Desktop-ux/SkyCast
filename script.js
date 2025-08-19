@@ -1,11 +1,13 @@
 let searchbtn = document.querySelector(".search")
 let cityinp = document.querySelector(".cityinp")
 let app = document.querySelector(".app-container")
+let intro = document.querySelector(".intro")
+let main = document.querySelector(".main")
 
-function getinfo(country){
-    return fetch(`https://api.weatherapi.com/v1/forecast.json?key=55547273c45c48f7b3e202540251808&q=${country}&days=1&aqi=no&alerts=no`).then((raw) =>{
-       return raw.json()
-    })
+function getinfo(country) {
+  return fetch(`https://api.weatherapi.com/v1/forecast.json?key=4ee6be20ea3a44a696995545251908&q=${country}&days=1&aqi=no&alerts=no`).then((raw) => {
+    return raw.json()
+  })
 }
 
 // Weather conditions mapping
@@ -33,19 +35,19 @@ const weatherConditions = {
   1282: { label: "Severe Thunderstorm", background: "bg-gradient-to-b from-red-800 to-black", animation: "severeThunderAnimation" }
 };
 
-function decorateui(details){
-    let conditionCode = details.current.condition.code;
-    let condition = weatherConditions[conditionCode] || {
-      label: details.current.condition.text,
-      background: "bg-gradient-to-b from-gray-700 to-black",
-      animation: "defaultAnimation"
-    };
+function decorateui(details) {
+  let conditionCode = details.current.condition.code;
+  let condition = weatherConditions[conditionCode] || {
+    label: details.current.condition.text,
+    background: "bg-gradient-to-b from-gray-700 to-black",
+    animation: "defaultAnimation"
+  };
 
-    // Apply background style to app container
-   app.className = `app-container flex flex-col items-center justify-center p-6 ${condition.background}`;
+  // Apply background style to app container
+  app.className = `app-container flex flex-col items-center justify-center p-6 ${condition.background}`;
 
 
-    let data = `
+  let data = `
       <h2 class="text-2xl font-semibold text-gray-200">${details.location.name}, ${details.location.country}</h2>
       <p class="text-6xl font-bold text-yellow-400">${details.current.temp_c}°C</p>
       <p class="capitalize text-lg text-gray-200">${condition.label}</p>
@@ -62,17 +64,54 @@ function decorateui(details){
       </div>
     `;
 
-    app.innerHTML = data;
+  app.innerHTML = data;
 }
 
-searchbtn.addEventListener("click", function(){
-    let city = cityinp.value.trim()
-    if(city.length > 0){
-        getinfo(city).then(data=>{
-            console.log(data)
-            decorateui(data)
-        })
-    } else {
-        throw new Error("Invalid Input")
-    }
+
+window.addEventListener("load", function () {
+  let t1 = gsap.timeline()
+
+  t1.to(".intro", {
+    opacity: 1,
+    y: -20,
+    duration: 1.5,
+    ease: "power2.out"
+  })
+  t1.to(".intro", {
+    opacity: 0,
+    duration: 0.5,
+    delay: 1
+  })
+
+  t1.add(() => {
+    intro.style.display = "none"
+    main.classList.remove("hidden")
+  })
+
+  t1.to(".main", {
+    opacity: 1,
+    y: -10,
+    duration: 1,
+    ease: "back.out(1.7)"
+  })
+})
+
+
+searchbtn.addEventListener("click", function () {
+  let city = cityinp.value.trim()
+  if (city.length > 0) {
+    getinfo(city).then(data => {
+      console.log(data)
+      decorateui(data)
+    })
+    gsap.to(".app-container", {
+      opacity: 1,
+      y: -10,
+      duration: 1.5,
+      ease: "power2.out"
+    });
+
+  } else {
+    throw new Error("Invalid Input")
+  }
 })

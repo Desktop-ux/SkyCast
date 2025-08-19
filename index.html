@@ -10,9 +10,18 @@
 
 <body class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
 
+
+  <!-- Intro Screen -->
+  <div class="intro text-center opacity-0">
+    <h1 class="text-4xl font-bold text-blue-400 mb-4">🌤️ Weather App</h1>
+    <p class="text-gray-400">Loading...</p>
+  </div>
+
   <!-- Container -->
+
+  
   <div
-    class="bg-gray-900/80 backdrop-blur-lg text-gray-100 rounded-2xl shadow-xl p-6 w-full max-w-md border border-gray-700">
+    class="main hidden  bg-gray-900/80 backdrop-blur-lg text-gray-100 rounded-2xl shadow-xl p-6 w-full max-w-md border border-gray-700">
 
     <!-- Header -->
     <h1 class="text-3xl font-bold text-center mb-6 text-blue-400">🌤️ Weather App</h1>
@@ -31,6 +40,10 @@
 
     </div>
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"
+      integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="script.js"></script>
 </body>
 
