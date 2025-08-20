@@ -3,9 +3,27 @@ let cityinp = document.querySelector(".cityinp")
 let app = document.querySelector(".app-container")
 let intro = document.querySelector(".intro")
 let main = document.querySelector(".main")
+let interrupt = document.querySelector(".interrupt")
+let tryAgainbtn = document.querySelector(".try-again")
+
+// Show Interrupt
+function showinterrupt(){
+  interrupt.classList.remove("hidden")
+  setTimeout(() => {
+    interrupt.classList.add("opacity-100")
+  }, 10);
+}
+
+// Hide interrupt
+function hidinterrupt(){
+  interrupt.classList.remove("opacity-100")
+  setTimeout(() => {
+    interrupt.classList.add("hidden")
+  }, 500);
+}
 
 function getinfo(country) {
-  return fetch(`https://api.weatherapi.com/v1/forecast.json?key=4ee6be20ea3a44a696995545251908&q=${country}&days=1&aqi=no&alerts=no`).then((raw) => {
+  return fetch(`https://api.weatherapi.com/v1/forecast.json?key=9eac2a67633c41dc802112234252008&q=${country}&days=1&aqi=no&alerts=no`).then((raw) => {
     return raw.json()
   })
 }
@@ -98,6 +116,7 @@ window.addEventListener("load", function () {
 
 
 searchbtn.addEventListener("click", function () {
+  
   let city = cityinp.value.trim()
   if (city.length > 0) {
     getinfo(city).then(data => {
@@ -111,7 +130,44 @@ searchbtn.addEventListener("click", function () {
       ease: "power2.out"
     });
 
-  } else {
-    throw new Error("Invalid Input")
   }
+  //  else {
+  //    getinfo(city).then(data => {
+  //     if (data.error) {
+  //       showinterrupt();
+  //     }
+  //   }).catch(() => {
+  //     showinterrupt();
+  //   });
+  // }
+   if (city.length === 0) {
+    // Empty input → directly show interrupt
+    showinterrupt();
+    return;
+  }
+
+  getinfo(city).then(data => {
+    if (data.error) {
+      // API returned an error → show interrupt
+      showinterrupt();
+    } else {
+      // Valid response → decorate UI
+      decorateui(data);
+      gsap.to(".app-container", {
+        opacity: 1,
+        y: -10,
+        duration: 1.5,
+        ease: "power2.out"
+      });
+    }
+  }).catch(() => {
+    // Network or API failure → show interrupt
+    showinterrupt();
+  });
 })
+
+
+tryAgainbtn.addEventListener("click", function () {
+  hidinterrupt();
+  cityinp.value = ""; // optional: clear input
+});
