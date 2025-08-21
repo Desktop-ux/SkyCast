@@ -23,7 +23,7 @@ function hidinterrupt(){
 }
 
 function getinfo(country) {
-  return fetch(`http://api.weatherapi.com/v1/forecast.json?key=630eb0036eb2406bab5163749252108&q=${country}&days=1&aqi=no&alerts=no`).then((raw) => {
+  return fetch(`https://api.weatherapi.com/v1/forecast.json?key=630eb0036eb2406bab5163749252108&q=${country}&days=1&aqi=no&alerts=no`).then((raw) => {
     return raw.json()
   })
 }
